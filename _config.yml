@@ -2,7 +2,7 @@
 title: Arch Almanzar
 email: "palmanzarr@gmail.com"
 description: "Arch Almanzar"
-url: "https://palmanzarr.github.io/"
+url: "https://palmanzar.com/"
 baseurl: "/"
 facebook_username: ""
 twitter_username: ""
@@ -33,7 +33,7 @@ comments :
 
 # Internal nav
 nav:
-  - PROYECTOS: "https://sunbliss.github.io/photorama/gallery/"  
+  - PROYECTOS: "https://palmanzar.com/gallery/"  
 
 # All translation keys
 translations:
