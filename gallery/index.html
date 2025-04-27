@@ -1,110 +1,738 @@
----
-layout: page
-title: "PROYECTOS"
-description: "Proyectos arquitectónicos"
-active: gallery
-header-img: "img/gallery-bg.jpg"
-images:
- - image_path: /gallery/albums/alb01.jpg
-   gallery-folder: /gallery/gallery01/
-   gallery-name: Brisas del Crucero
-   gallery-date: Septiembre 2024
- - image_path: /gallery/albums/alb02.jpg
-   gallery-folder: /gallery/gallery02/
-   gallery-name: gallery2
-   gallery-date: June 2015
- - image_path: /gallery/albums/alb03.jpg
-   gallery-folder: /gallery/gallery03/
-   gallery-name: gallery3
-   gallery-date: May 2015
- - image_path: /gallery/albums/alb04.jpg
-   gallery-folder: /gallery/gallery04/
-   gallery-name: gallery4
-   gallery-date: April 2015
- - image_path: /gallery/albums/alb05.jpg
-   gallery-folder: /gallery/gallery05/
-   gallery-name: gallery5
-   gallery-date: March 2015
- - image_path: /gallery/albums/alb06.jpg
-   gallery-folder: /gallery/gallery06/
-   gallery-name: gallery6
-   gallery-date: February 2015
- - image_path: /gallery/albums/alb07.jpg
-   gallery-folder: /gallery/gallery07/
-   gallery-name: gallery7
-   gallery-date: January 2015
- - image_path: /gallery/albums/alb08.jpg
-   gallery-folder: /gallery/gallery08/
-   gallery-name: gallery8
-   gallery-date: December 2014
- - image_path: /gallery/albums/alb09.jpg
-   gallery-folder: /gallery/gallery09/
-   gallery-name: gallery9
-   gallery-date: November 2014
----
-
-<html class="no-js" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta content="charset=utf-8">
-    <link rel="stylesheet" href="{{ "/css/selena.css" | prepend: site.baseurl }}">
+    <meta charset="UTF-8">
+    <title>PAlmanzar Arch Portfolio Grid</title>
+    <style>
+        h1 {
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        body {
+            background-color: #000;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+        }
+
+        .grid-item:nth-child(odd) {
+            grid-row: span 2;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        /* Description overlay */
+        .description-overlay {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, 
+                rgba(0,0,0,0.95),
+                rgba(0,0,0,0));
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: flex-end;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .description-overlay h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .description-overlay p {
+            font-size: 0.9em;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .grid-item:hover .description-overlay {
+            bottom: 0;
+            opacity: 1;
+        }
+
+        /* Fullscreen modal */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: zoom-out;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 40px;
+            top: 40px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .close-button:hover {
+            opacity: 1;
+        }
+
+        /* Keyboard navigation */
+        .prev-button, .next-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+            z-index: 1001;
+        }
+
+        .prev-button:hover, .next-button:hover {
+            opacity: 1;
+        }
+
+        .prev-button { left: 20px; }
+        .next-button { right: 20px; }
+
+        .header-container {
+            position: fixed;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .inner-header {
+            max-width: 2200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
+<body>
+    <div class="header-container">
+        <div class="inner-header">
+            <div class="logo">
+                <a href="/" title="Home"><img src="https://palmanzar.com/logo.png" alt="logo" style="width:150px;cursor:pointer;margin-top:15px;"/></a>
+            </div>
+        </div>
+    </div>
+    <div><h1>
+        <br><br><br><br><br><br>
+    Proyectos arquitectónicos
+    </h1></div>
+
+    <!-- Brisas del Crucero  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/BDC/1.jpg" alt="Brisas del Crucero">
+            <div class="description-overlay">
+                <h3>Brisas del Crucero</h3>
+                <p>Diseño: Pedro Almánzar <br> Colaborador autorizado: Aaron Álvarez Almánzar <br> Año: 2024 <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/BDC/2.jpg" alt="Brisas del Crucero">
+            <div class="description-overlay">
+                <h3>Brisas del Crucero</h3>
+                <p>Diseño: Pedro Almánzar <br> Colaborador autorizado: Aaron Álvarez Almánzar <br> Año: 2024 <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-grid">
+        <div class="grid-item">
+            <img src="./iGalery/BDC/3.jpg" alt="Brisas del Crucero">
+            <div class="description-overlay">
+                <h3>Brisas del Crucero</h3>
+                <p>Diseño: Pedro Almánzar <br> Colaborador autorizado: Aaron Álvarez Almánzar <br> Año: 2024 <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/BDC/4.jpg" alt="Brisas del Crucero">
+            <div class="description-overlay">
+                <h3>Brisas del Crucero</h3>
+                <p>Diseño: Pedro Almánzar <br> Colaborador autorizado: Aaron Álvarez Almánzar <br> Año: 2024 <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Villa Pedregal I  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/VP1/1.jpg" alt="Villa Pedregal I">
+            <div class="description-overlay">
+                <h3>Villa Pedregal I</h3>
+                <p>Diseño:Pedro Almánzar 
+                    <br> Colaborador: Manuel Suárez - Sucasgroup
+                    <br> Año: 2024
+                    <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VP1/2.jpg" alt="Villa Pedregal I">
+            <div class="description-overlay">
+                <h3>Villa Pedregal I</h3>
+                <p>Diseño:Pedro Almánzar 
+                    <br> Colaborador: Manuel Suárez - Sucasgroup
+                    <br> Año: 2024
+                    <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VP1/3.jpg" alt="Villa Pedregal I">
+            <div class="description-overlay">
+                <h3>Villa Pedregal I</h3>
+                <p>Diseño:Pedro Almánzar 
+                    <br> Colaborador: Manuel Suárez - Sucasgroup
+                    <br> Año: 2024
+                    <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-grid">
+        <div class="grid-item">
+            <img src="./iGalery/VP1/4.jpg" alt="Villa Pedregal I">
+            <div class="description-overlay">
+                <h3>Villa Pedregal I</h3>
+                <p>Diseño:Pedro Almánzar 
+                    <br> Colaborador: Manuel Suárez - Sucasgroup
+                    <br> Año: 2024
+                    <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VP1/5.jpg" alt="Villa Pedregal I">
+            <div class="description-overlay">
+                <h3>Villa Pedregal I</h3>
+                <p>Diseño:Pedro Almánzar 
+                    <br> Colaborador: Manuel Suárez - Sucasgroup
+                    <br> Año: 2024
+                    <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VP1/6.jpg" alt="Villa Pedregal I">
+            <div class="description-overlay">
+                <h3>Villa Pedregal I</h3>
+                <p>Diseño:Pedro Almánzar 
+                    <br> Colaborador: Manuel Suárez - Sucasgroup
+                    <br> Año: 2024
+                    <br> Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Villa Pedregal II  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/VP2/1.jpg" alt="Villa Pedregal II">
+            <div class="description-overlay">
+                <h3>Villa Pedregal II</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Manuel Suárez - Sucasgroup
+                    <br>Año: 2025
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VP2/2.jpg" alt="Villa Pedregal II">
+            <div class="description-overlay">
+                <h3>Villa Pedregal II</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Manuel Suárez - Sucasgroup
+                    <br>Año: 2025
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-grid">
+        <div class="grid-item">
+            <img src="./iGalery/VP2/3.jpg" alt="Villa Pedregal II">
+            <div class="description-overlay">
+                <h3>Villa Pedregal II</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Manuel Suárez - Sucasgroup
+                    <br>Año: 2025
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VP2/4.jpg" alt="Villa Pedregal II">
+            <div class="description-overlay">
+                <h3>Villa Pedregal II</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Manuel Suárez - Sucasgroup
+                    <br>Año: 2025
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Villa Marcos  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/VM/1.jpg" alt="Villa Marcos">
+            <div class="description-overlay">
+                <h3>Villa Marcos</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2024
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VM/2.jpg" alt="Villa Marcos">
+            <div class="description-overlay">
+                <h3>Villa Marcos</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2024
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VM/3.jpg" alt="Villa Marcos">
+            <div class="description-overlay">
+                <h3>Villa Marcos</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2024
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-grid">
+        <div class="grid-item">
+            <img src="./iGalery/VM/4.jpg" alt="Villa Marcos">
+            <div class="description-overlay">
+                <h3>Villa Marcos</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2024
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VM/5.jpg" alt="Villa Marcos">
+            <div class="description-overlay">
+                <h3>Villa Marcos</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2024
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
 
 
-    <body class="gallery">
- 
-	<section id="content" role="main">
-		<div class="wrapper">
-	
-			<h2>{{page.title}}</h2>
-			
-			<!-- Gallery __-->
-			<div class="gallery masonry-gallery">
-				
-{% for image in page.images %}  	
+        <!-- The Revolution in Jersey City  -->
+        <div class="portfolio-grid">
+            <!-- Using placeholder images -->
+            <div class="grid-item">
+                <img src="./iGalery/TRiJC/1.jpg" alt="Brisas del Crucero">
+                <div class="description-overlay">
+                    <h3>The Revolution in Jersey City</h3>
+                    <p>Diseño:Pedro Almánzar
+                        <br>Colaborador: JBT Developers
+                        <br>Año: 2023
+                        <br>Ubicación: New Jersey, Estados Unidos</p>
+                </div>
+            </div>
+            <div class="grid-item">
+                <img src="./iGalery/TRiJC/2.jpg" alt="Brisas del Crucero">
+                <div class="description-overlay">
+                    <h3>The Revolution in Jersey City</h3>
+                    <p>Diseño:Pedro Almánzar
+                        <br>Colaborador: JBT Developers
+                        <br>Año: 2023
+                        <br>Ubicación: New Jersey, Estados Unidos</p>
+                </div>
+            </div>
+            <div class="grid-item">
+                <img src="./iGalery/TRiJC/3.jpg" alt="Brisas del Crucero">
+                <div class="description-overlay">
+                    <h3>The Revolution in Jersey City</h3>
+                    <p>Diseño:Pedro Almánzar
+                        <br>Colaborador: JBT Developers
+                        <br>Año: 2023
+                        <br>Ubicación: New Jersey, Estados Unidos</p>
+                </div>
+            </div>
+        </div>
+        <div class="portfolio-grid">
+            <div class="grid-item">
+                <img src="./iGalery/TRiJC/4.jpg" alt="Brisas del Crucero">
+                <div class="description-overlay">
+                    <h3>The Revolution in Jersey City</h3>
+                    <p>Diseño:Pedro Almánzar
+                        <br>Colaborador: JBT Developers
+                        <br>Año: 2023
+                        <br>Ubicación: New Jersey, Estados Unidos</p>
+                </div>
+            </div>
+            <div class="grid-item">
+                <img src="./iGalery/TRiJC/5.jpg" alt="Project 5">
+                <div class="description-overlay">
+                    <h3>The Revolution in Jersey City</h3>
+                    <p>Diseño:Pedro Almánzar
+                        <br>Colaborador: JBT Developers
+                        <br>Año: 2023
+                        <br>Ubicación: New Jersey, Estados Unidos</p>
+                </div>
+            </div>
+            <div class="grid-item">
+                <img src="./iGalery/TRiJC/6.jpg" alt="Project 6">
+                <div class="description-overlay">
+                    <h3>The Revolution in Jersey City</h3>
+                    <p>Diseño:Pedro Almánzar
+                        <br>Colaborador: JBT Developers
+                        <br>Año: 2023
+                        <br>Ubicación: New Jersey, Estados Unidos</p>
+                </div>
+            </div>
+        </div>
 
-	               <figure class="gallery-item">
-                         <figure class="effect-selena">
-					<header class='gallery-icon'>
-		       
-<a href="{{ site.url }}{{ site.baseurl }}{{ image.gallery-folder }}">
-<img src="{{ site.url }}{{ site.baseurl }}{{ image.image_path }}"></a>
+    <!-- Casa Groria  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/CG/1.jpg" alt="Brisas del Crucero">
+            <div class="description-overlay">
+                <h3>Casa Groria</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2023
+                    <br>Ubicación: California, Estados Unidos</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/CG/2.jpg" alt="Brisas del Crucero">
+            <div class="description-overlay">
+                <h3>Casa Groria</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2023
+                    <br>Ubicación: California, Estados Unidos</p>
+            </div>
+        </div>
+    </div>
 
-					</header>	
-					<figcaption class='gallery-caption'>
-						<div class="entry-summary">
-							<h3>{{image.gallery-name}}</h3>
-							<p>{{image.gallery-date}}</p>
-						</div>
-					</figcaption>
-                       </figure>
-				</figure>
-							
-{% endfor %}		
-				
-			</div>
-			
-		</div><!-- END .wrapper -->
-	</section>
+    <!-- Residencial Hdez - Casa A1  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/RHCSA1/1.jpg" alt="Residencial Hdez - Casa A1">
+            <div class="description-overlay">
+                <h3>Residencial Hdez - Casa A1</h3>
+                <p>Diseño: Pedro Almánzar
+                    <br>Colaborador: Yesenia Hernández
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/RHCSA1/2.jpg" alt="Residencial Hdez - Casa A1">
+            <div class="description-overlay">
+                <h3>Residencial Hdez - Casa A1</h3>
+                <p>Diseño: Pedro Almánzar
+                    <br>Colaborador: Yesenia Hernández
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-grid">
+        <div class="grid-item">
+            <img src="./iGalery/RHCSA1/3.jpg" alt="Residencial Hdez - Casa A1">
+            <div class="description-overlay">
+                <h3>Residencial Hdez - Casa A1</h3>
+                <p>Diseño: Pedro Almánzar
+                    <br>Colaborador: Yesenia Hernández
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/RHCSA1/4.jpg" alt="Residencial Hdez - Casa A1">
+            <div class="description-overlay">
+                <h3>Residencial Hdez - Casa A1</h3>
+                <p>Diseño: Pedro Almánzar
+                    <br>Colaborador: Yesenia Hernández
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+    </div>
 
+    <!-- Villa Ensueño  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/VE/1.jpg" alt="Villa Ensueño">
+            <div class="description-overlay">
+                <h3>Villa Ensueño</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2014
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VE/2.jpg" alt="Villa Ensueño">
+            <div class="description-overlay">
+                <h3>Villa Ensueño</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2014
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VE/3.jpg" alt="Villa Ensueño">
+            <div class="description-overlay">
+                <h3>VVilla Ensueño</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2014
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-grid">
+        <div class="grid-item">
+            <img src="./iGalery/VE/4.jpg" alt="Villa Ensueño">
+            <div class="description-overlay">
+                <h3>Villa Ensueño</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2014
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VE/5.jpg" alt="Villa Ensueño">
+            <div class="description-overlay">
+                <h3>Villa Ensueño</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2014
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/VE/6.jpg" alt="Villa Ensueño">
+            <div class="description-overlay">
+                <h3>Villa Ensueño</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Año: 2014
+                    <br>Ubicación: Jarabacoa, República Dominicana</p>
+            </div>
+        </div>
+    </div>
 
-<br>
-<h6><p>Image Source: <a href="https://unsplash.com/photos/YOT6kS8YtEA/">Unsplash</a></p></h6>
+    <!-- Residencial Hdez - Casa B19  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/RHCSB19/1.jpg" alt="Residencial Hdez - Casa B19">
+            <div class="description-overlay">
+                <h3>Residencial Hdez - Casa B19</h3>
+                <p>[Casa B19]
+                    Diseño: Pedro Almánzar
+                    <br>Colaborador: Juan de Jesús Núñez
+                    <br>Año: 2021
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/RHCSB19/2.jpg" alt="Residencial Hdez - Casa B19">
+            <div class="description-overlay">
+                <h3>Residencial Hdez - Casa B19</h3>
+                <p>[Casa B19]
+                    Diseño: Pedro Almánzar
+                    <br>Colaborador: Juan de Jesús Núñez
+                    <br>Año: 2021
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+    </div>
 
-<!-- jQuery -->    
+    <!-- Casa El Pino  -->
+    <div class="portfolio-grid">
+        <!-- Using placeholder images -->
+        <div class="grid-item">
+            <img src="./iGalery/CEP/1.jpg" alt="Casa El Pino">
+            <div class="description-overlay">
+                <h3>Casa El Pino</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/CEP/2.jpg" alt="Casa El Pino">
+            <div class="description-overlay">
+                <h3>Casa El Pino</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-grid">
+        <div class="grid-item">
+            <img src="./iGalery/CEP/3.jpg" alt="Casa El Pino">
+            <div class="description-overlay">
+                <h3>Casa El Pino</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <img src="./iGalery/CEP/4.jpg" alt="Casa El Pino">
+            <div class="description-overlay">
+                <h3>Casa El Pino</h3>
+                <p>Diseño:Pedro Almánzar
+                    <br>Colaborador: Napoleon Núñez Almánzar
+                    <br>Año: 2022
+                    <br>Ubicación: La Vega, República Dominicana</p>
+            </div>
+        </div>
+    </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="{{ site.baseurl }}/js/retina.min.js"></script>
-<!-- include Masonry -->
-<script src="{{ site.baseurl }}/js/isotope.pkgd.min.js"></script> 
-<!-- include mousewheel plugins -->
-<script src="{{ site.baseurl }}/js/jquery.mousewheel.min.js"></script>
-<!-- include carousel plugins -->
-<script src="{{ site.baseurl}}/js/jquery.tinycarousel.min.js"></script>
-<!-- include svg line drawing plugin -->
-<script src="{{ site.baseurl }}/js/jquery.lazylinepainter.min.js"></script>
-<!-- include custom script -->
-<script src="{{ site.baseurl }}/js/scripts.js"></script>
-<!-- Modernizr -->
- <script src="{{ site.baseurl }}/js/modernizr.js"></script>
+    <!-- Fullscreen modal -->
+    <div id="fullscreen-modal" class="fullscreen-modal">
+        <span class="close-button">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <span class="prev-button">&#10094;</span>
+        <span class="next-button">&#10095;</span>
+    </div>
 
-</body></html>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('fullscreen-modal');
+            const modalImg = document.getElementById('modal-image');
+            const closeButton = document.querySelector('.close-button');
+            const prevButton = document.querySelector('.prev-button');
+            const nextButton = document.querySelector('.next-button');
+
+            // Open modal on click
+            document.querySelectorAll('.grid-item').forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    modal.style.display = 'block';
+                    modalImg.src = item.querySelector('img').src;
+                    currentIndex = index;
+                });
+            });
+
+            let currentIndex;
+
+            // Close modal functions
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+
+            closeButton.onclick = closeModal;
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            };
+
+            // Keyboard navigation
+            document.onkeydown = function(e) {
+                if (!modal.style.display || modal.style.display === 'none') return;
+
+                switch(e.key) {
+                    case 'Escape':
+                        closeModal();
+                        break;
+                    case 'ArrowLeft':
+                        navigateImages(-1);
+                        break;
+                    case 'ArrowRight':
+                        navigateImages(1);
+                        break;
+                }
+            };
+
+            // Click navigation
+            prevButton.onclick = () => navigateImages(-1);
+            nextButton.onclick = () => navigateImages(1);
+
+            // Image navigation function
+            function navigateImages(direction) {
+                const items = document.querySelectorAll('.grid-item');
+                currentIndex += direction;
+                
+                if (currentIndex >= items.length) currentIndex = 0;
+                if (currentIndex < 0) currentIndex = items.length - 1;
+
+                modalImg.src = items[currentIndex].querySelector('img').src;
+            }
+        });
+    </script>
+</body>
+</html>
